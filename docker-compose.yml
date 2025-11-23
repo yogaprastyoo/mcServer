@@ -1,0 +1,24 @@
+services:
+  # This is your actual Minecraft server. It will be started and stopped by the service below.
+  minecraft-server:
+    build:
+      context: .
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    container_name: itc-fabricmc
+    restart: unless-stopped
+    # Ports are now managed by this container when it runs.
+    ports:
+      - "34980:34980"
+      - "50651:50651/udp"
+    environment:
+      - TZ=Asia/Jakarta
+    volumes:
+      - ./server:/fabric-server
+      - ./sleepingSettings.yml:/app/sleepingSettings.yml
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 7G
